@@ -2,7 +2,7 @@
 
 <p align="center" style="display:flex;align-items:center;justify-content:center;gap:10px;">
   <img src="https://skillicons.dev/icons?i=nodejs,express,js,css&theme=dark&perline=5" alt="Tech stack" />
-  <img src="https://avatars.githubusercontent.com/u/14957082?s=200&v=4" alt="OpenAI" width="52" height="52" />
+<img src="assets/openai.svg" alt="OpenAI" width="42" height="42" />
 </p>
 
 ---
@@ -39,9 +39,9 @@ O estilo visual foi inspirado em uma **cozinha caseira rústica**, com cores que
 ```
 culinary-ai-chat/
 │── index.html          # Página principal
-│── css/styles.css          # Estilos do chat (tema rústico culinária)
-│── js/scripts.js          # Lógica do frontend
-│── server/server.js           # Servidor Node + Express
+│── css/styles.css      # Estilos do chat (tema rústico culinária)
+│── js/scripts.js       # Lógica do frontend
+│── server/server.js    # Servidor Node + Express
 │── package.json        # Dependências e scripts
 │── .env                # Chaves privadas (não versionar)
 │── .env.example        # Exemplo de configuração
