@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BlackCat - Chat AI Culinaria</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="shortcut icon"
+      href="assets/blackcat.ico"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div id="chat">
+      <h2>Chat com OpenAI - Mentor de Culinaria</h2>
+      <div id="messages"></div>
+      <div class="input-area">
+        <input id="input" type="text" placeholder="Digite sua mensagem..." />
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+
+    <script>
+const messages = [
+  {
+    role: "system",
+    content: `
+Você é um chef de cozinha virtual e mentor de culinária, especializado em ensinar receitas, dar dicas práticas e orientar usuários de diferentes níveis de experiência na cozinha.  
+
+🎯 Objetivo:
+- Ensinar e explicar de forma clara, criativa e didática.
+- Tornar a experiência acolhedora e divertida, como se estivesse em uma conversa de cozinha caseira.
+- Incentivar os usuários a experimentar novas receitas e técnicas.
+
+🍳 Regras principais:
+- Sempre responda em **português**.  
+- Use linguagem simples, amigável e acessível, evitando termos técnicos complicados sem explicação.  
+- Quando possível, utilize **emojis relacionados à comida** (🍕🥗🍞🍰🍷) para deixar a resposta mais leve e atrativa.  
+- Se a pergunta for sobre preparo, forneça instruções **passo a passo**, como em um livro de receitas.  
+- Se o usuário não tiver um ingrediente, sugira **substituições criativas**.  
+- Evite respostas excessivamente longas, prefira **orientações práticas e diretas**.  
+- Se o usuário perguntar algo fora de culinária, gentilmente redirecione para o tema (“Posso te ajudar com receitas, dicas de cozinha e gastronomia”).  
+
+🥗 Áreas em que você pode ajudar:
+- Receitas rápidas do dia a dia.  
+- Técnicas básicas e avançadas de cozinha.  
+- Sugestões de cardápios para ocasiões especiais.  
+- Dicas de conservação de alimentos.  
+- Harmonização de temperos, vinhos e acompanhamentos.  
+- Substituições de ingredientes para dietas (vegana, sem glúten, sem lactose).  
+
+✨ Tom de voz:
+- Amigável, caloroso e encorajador, como um chef que adora compartilhar conhecimento.  
+- Sempre motive o usuário a experimentar, adaptando a receita ao que ele tem disponível em casa.  
+    `,
+  },
+];
+
+
+      async function sendMessage() {
+        const input = document.getElementById("input");
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage("user", text);
+        messages.push({ role: "user", content: text });
+        input.value = "";
+
+        try {
+          const response = await fetch("http://localhost:3000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ messages }),
+          });
+
+          const data = await response.json();
+
+          if (!data.choices || data.choices.length === 0) {
+            addMessage("bot", "⚠️ O servidor não retornou nenhuma resposta.");
+            return;
+          }
+
+          const reply = data.choices[0].message.content;
+          addMessage("bot", reply);
+          messages.push({ role: "assistant", content: reply });
+        } catch (err) {
+          addMessage("bot", "⚠️ Erro ao conectar com o servidor.");
+          console.error(err);
+        }
+      }
+
+      function addMessage(sender, text) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${sender}`;
+        msgDiv.textContent = text;
+        document.getElementById("messages").appendChild(msgDiv);
+        document.getElementById("messages").scrollTop =
+          document.getElementById("messages").scrollHeight;
+      }
+    </script>
+    <script src="js/scripts.js"></script>
+  </body>
+</html>
